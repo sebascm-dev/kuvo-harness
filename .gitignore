@@ -1,0 +1,14 @@
+# Dependencias y builds
+node_modules/
+dist/
+
+# Configuración local de Claude Code (no se comparte)
+.claude/settings.local.json
+
+# Registro de skills de gentle-ai: se genera en cada máquina y contiene rutas locales
+.atl/
+
+# Secretos y logs
+.env
+.env.*
+*.log
