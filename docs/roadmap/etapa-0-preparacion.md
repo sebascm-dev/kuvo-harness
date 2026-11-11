@@ -211,15 +211,17 @@ El repo está en GitHub con `.gitattributes`, la estructura de carpetas, `packag
 
 Un proyecto pequeño **de usar y tirar**, solo para probar el harness hasta que tengamos el banco de pruebas real.
 
-- [ ] **0.4.1 · Crear el proyecto** · ⏱️ 20 min
+- [x] **0.4.1 · Crear el proyecto** · ⏱️ 20 min · ✅ 11/11
   - **Qué:** una app React + TypeScript mínima dentro de `sandbox/`.
   - **Por qué:** el harness necesita código con capas sobre el que trabajar. Este sandbox es su campo de entrenamiento.
   - **Cómo:**
     1. En la carpeta del repo: `pnpm create vite sandbox --template react-ts`.
     2. `cd sandbox` y `pnpm install`.
   - **Hecho cuando:** `pnpm dev` dentro de `sandbox/` abre la app en el navegador.
+  - **Criterio precisado (11/11, con el usuario):** el comando del roadmap ya no sirve tal cual: `create-vite` 9.3.4 usa Oxlint por defecto en las plantillas de React y la 0.4.4 necesita ESLint, así que el proyecto se crea con `pnpm create vite sandbox --template react-ts --eslint --overwrite --no-interactive --no-immediate`. `--overwrite` borra `sandbox/.gitkeep`, con la confirmación del usuario. El usuario pidió terminar la fase sin parar, de modo que la app no la mira él: se abre en un Edge sin ventana (`msedge --headless --dump-dom`) y se comprueba el HTML ya renderizado.
+  - **Comprobado:** `pnpm install` termina con código 0 (React 19.3.1, Vite 8.3.7, TypeScript 6.0.3, ESLint 10.14.0). Con `pnpm dev --port 5173 --strictPort` en marcha, `Invoke-WebRequest http://localhost:5173/` responde `200` y el DOM que devuelve Edge sin ventana contiene `<h1>Get started</h1>` y el botón `Count is 0`, que solo existen si React ha renderizado la app. `sandbox/.gitkeep` ya no existe.
 
-- [ ] **0.4.2 · Crear las tres capas** · ⏱️ 30 min
+- [x] **0.4.2 · Crear las tres capas** · ⏱️ 30 min · ✅ 11/11
   - **Qué:** tres carpetas: `src/core` (lógica pura), `src/ui` (componentes) y `src/app` (páginas y estado).
   - **Por qué:** es la estructura mínima donde "capa a capa" y las fronteras de lint tienen sentido.
   - **Cómo:**
@@ -228,8 +230,10 @@ Un proyecto pequeño **de usar y tirar**, solo para probar el harness hasta que 
     3. En `src/ui/Total.tsx`, un componente que recibe un número por props y lo muestra.
     4. En `src/app/App.tsx`, usa los dos.
   - **Hecho cuando:** la app muestra el total y cada capa tiene al menos un fichero.
+  - **Criterio precisado (11/11, con el usuario):** igual que en la 0.4.1, el total no lo mira el usuario: se comprueba en el DOM que devuelve un Edge sin ventana. La demo de la plantilla se sustituye por una app mínima, así que se eliminan `src/App.tsx`, `src/App.css`, `src/assets/` y `public/icons.svg`, que solo usaba esa demo.
+  - **Comprobado:** existen `src/core/sum.ts`, `src/core/index.ts`, `src/ui/Total.tsx` y `src/app/App.tsx`, y `src/main.tsx` importa `./app/App.tsx`. Con `pnpm dev` en marcha, el DOM de Edge sin ventana contiene `<main><h1>Sandbox</h1><p class="total">Total: 5</p></main>`: el `5` sale de `sum(2, 3)` en `core` y lo pinta `Total` en `ui`.
 
-- [ ] **0.4.3 · Añadir tests** · ⏱️ 30 min
+- [x] **0.4.3 · Añadir tests** · ⏱️ 30 min · ✅ 11/11
   - **Qué:** Vitest con un test para `sum`.
   - **Por qué:** sin tests, ningún validador puede decir si el trabajo del agente está bien. Es el requisito número uno.
   - **Cómo:**
@@ -237,8 +241,10 @@ Un proyecto pequeño **de usar y tirar**, solo para probar el harness hasta que 
     2. Crea `src/core/sum.test.ts` junto a `sum.ts`.
     3. Añade `"test": "vitest run"` a los scripts de `sandbox/package.json`.
   - **Hecho cuando:** `pnpm test` pasa, y si cambias el resultado esperado, falla con código distinto de 0.
+  - **Criterio precisado (11/11, con el usuario):** al existir `sandbox/src/core/sum.test.ts`, el `pnpm test` de la raíz (`node --test` sin rutas) lo recoge, porque Node 24 ejecuta también los `*.test.ts`, y falla con código 1: es un test de Vitest y no puede correr fuera de su runner. El roadmap prevé el arreglo en la tarea 3.8.1 (`etapa-3-juez.md`), pero las Etapas 1 y 2 ya necesitan `pnpm test` en verde, así que se adelanta: el script de la raíz pasa a ser `node --test ".claude/**/*.test.mjs" "scripts/**/*.test.mjs"`. La tarea de la Etapa 3 no se tacha.
+  - **Comprobado:** en `sandbox/`, `pnpm test` ejecuta `vitest run` (Vitest 5.1.0), responde `Test Files 1 passed (1)` y `Tests 2 passed (2)` y sale con código 0. Con el resultado esperado cambiado de `5` a `6`, responde `AssertionError: expected 5 to be 6`, `Tests 1 failed | 1 passed (2)` y sale con código 1; restaurado, vuelve a verde. En la raíz, `pnpm test` con el script acotado responde `tests 0`, `fail 0` y sale con código 0.
 
-- [ ] **0.4.4 · Añadir typecheck y lint de un fichero** · ⏱️ 20 min
+- [x] **0.4.4 · Añadir typecheck y lint de un fichero** · ⏱️ 20 min · ✅ 11/11
   - **Qué:** los scripts `typecheck` y `lint:file`.
   - **Por qué:** el hook de la Etapa 2 necesita poder lintar un solo fichero, y el validador global necesita el typecheck.
   - **Cómo:** añade a `sandbox/package.json`:
@@ -248,9 +254,12 @@ Un proyecto pequeño **de usar y tirar**, solo para probar el harness hasta que 
     ```
     `pnpm lint:file src/core/sum.ts` pasará la ruta al final del comando.
   - **Hecho cuando:** `pnpm lint`, `pnpm lint:file src/core/sum.ts`, `pnpm typecheck`, `pnpm test` y `pnpm build` funcionan en `sandbox/`.
+  - **Comprobado:** en `sandbox/`, en PowerShell, los cinco comandos salen con código 0: `pnpm lint` (`eslint .`), `pnpm lint:file src/core/sum.ts` (`eslint src/core/sum.ts`: la ruta llega al final del comando), `pnpm typecheck`, `pnpm test` (2 tests en verde) y `pnpm build` (`vite build` transforma 19 módulos). Con `const broken: string = a` metido a propósito en `sum.ts`, `lint` y `lint:file` salen con 1 (`no-unused-vars`), `typecheck` y `build` con 2 (`TS2322`) y `test` sigue en 0; retirado el error, los cinco vuelven a 0. Queda pendiente del usuario la comprobación aplazada en la 0.1.5: ver el subrayado de ESLint en VS Code.
 
 ### ✅ Checkpoint 0.4
 Dentro de `sandbox/`, los cinco comandos (`lint`, `lint:file`, `typecheck`, `test`, `build`) pasan. Y si metes un error a propósito en `sum.ts`, al menos uno de ellos falla.
+
+**Superado:** 11/11 · en `sandbox/`, en PowerShell, `pnpm lint`, `pnpm lint:file src/core/sum.ts`, `pnpm typecheck`, `pnpm test` y `pnpm build` salen con código 0; con `return a - b` metido a propósito en `sum.ts`, `pnpm test` sale con código 1 (`Tests 2 failed (2)`) y, retirado el error, los cinco vuelven a 0.
 
 ---
 
