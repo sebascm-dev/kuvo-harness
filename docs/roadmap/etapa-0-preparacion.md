@@ -164,7 +164,7 @@ Sin mirar, sabes explicar las 4 fases, las 3 puertas (A, B y C) y para qué sirv
   - **Criterio precisado (11/11, con el usuario):** la carpeta `kuvo-harness` ya existía con el roadmap y las skills, así que el repo no se clona: se crea en GitHub y se enlaza a la carpeta existente con `git init`, `git remote add` y `git pull`. El resultado es el mismo que el de un clon. El repo lo crea Claude con `gh`, con el visto bueno del usuario.
   - **Comprobado:** `gh repo view sebascm-dev/kuvo-harness` responde visibilidad `PUBLIC` y licencia `MIT License`; en PowerShell, `git status` responde `On branch main` y `Your branch is up to date with 'origin/main'`, y `git log --oneline` muestra `5b1274b Initial commit` con `LICENSE` y `README.md`.
 
-- [ ] **0.3.2 · Fijar finales de línea** · ⏱️ 10 min
+- [x] **0.3.2 · Fijar finales de línea** · ⏱️ 10 min · ✅ 11/11
   - **Qué:** un fichero `.gitattributes` que obliga a usar finales de línea de tipo Linux.
   - **Por qué:** en Windows, Git puede convertir los finales de línea y romper scripts y validadores que comparan texto exacto.
   - **Cómo:** crea `.gitattributes` con esta línea:
@@ -172,6 +172,8 @@ Sin mirar, sabes explicar las 4 fases, las 3 puertas (A, B y C) y para qué sirv
     * text=auto eol=lf
     ```
   - **Hecho cuando:** el fichero está en el repo y hecho commit.
+  - **Criterio precisado (11/11, con el usuario):** el commit y el push de esta fase los hace Claude porque el usuario lo pidió en la sesión ("hazlo tú todo, sigue hasta terminar la fase"). Es una excepción de esta fase: la regla del repo sigue siendo que el commit y el push los hace el usuario. En esta tarea se añade además un `.gitignore`, que el roadmap no asigna a ninguna tarea y hace falta antes del primer commit.
+  - **Comprobado:** `git ls-files .gitattributes` lo lista dentro del commit `71ee5f4` (`chore: add repo skeleton, roadmap and root package.json`), su contenido es `* text=auto eol=lf` y `git check-attr eol -- package.json` responde `eol: lf`.
 
 - [x] **0.3.3 · Crear la estructura de carpetas** · ⏱️ 15 min · ✅ 11/11
   - **Qué:** las carpetas vacías de la arquitectura del índice.
@@ -200,6 +202,8 @@ Sin mirar, sabes explicar las 4 fases, las 3 puertas (A, B y C) y para qué sirv
 
 ### ✅ Checkpoint 0.3
 El repo está en GitHub con `.gitattributes`, la estructura de carpetas, `package.json` con `"type": "module"` y `CHANGELOG.md`. `pnpm test` se ejecuta sin error.
+
+**Superado:** 11/11 · `git push origin main` sube `71ee5f4` a `sebascm-dev/kuvo-harness`; `gh api repos/sebascm-dev/kuvo-harness/contents` lista `.gitattributes`, `CHANGELOG.md`, `package.json` (con `"type": "module"`), `docs`, `.claude` (con `agents`, `hooks`, `scripts` y `skills`), `scripts`, `templates` y `sandbox`; `pnpm test` responde `tests 0`, `fail 0` y sale con código 0.
 
 ---
 
