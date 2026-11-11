@@ -13,25 +13,30 @@
 
 ## Fase 1.1 · Decidir antes de escribir
 
-- [ ] **1.1.1 · Decidir el idioma de cada cosa** · ⏱️ 15 min
+- [x] **1.1.1 · Decidir el idioma de cada cosa** · ⏱️ 15 min · ✅ 11/11
   - **Qué:** en qué idioma van los prompts de los agentes, los artefactos, el código y los mensajes al usuario.
   - **Por qué:** el idioma es parte del contexto. Mezclarlo confunde al modelo y a los validadores, que buscan títulos por texto exacto.
   - **Cómo:** decide y apúntalo. Recomendación: prompts, artefactos y código en inglés (los modelos rinden mejor y los títulos son estables); las conversaciones contigo, en español.
   - **Hecho cuando:** tienes la decisión escrita en una línea.
+  - **Comprobado:** decidido por Claude por delegación del usuario ("Haz todas las tareas hasta terminar la fase"). La línea: inglés para todo lo que el harness instala o genera (prompts, skills, `contracts.md`, `decisions.md`, `architecture.md`, artefactos, código, comentarios y commits); español para las conversaciones, `docs/roadmap/`, `CHANGELOG.md` y las skills `iniciar-fase` y `cerrar-fase`. Está escrita como `ADR-001` en `docs/decisions.md`, con fecha `2026-11-11 17:28 (Europe/Madrid)`.
 
-- [ ] **1.1.2 · Decidir los nombres de todo** · ⏱️ 20 min
+- [x] **1.1.2 · Decidir los nombres de todo** · ⏱️ 20 min · ✅ 11/11
   - **Qué:** la lista de nombres que usarás: fases, agentes, artefactos, carpetas y tipos de ticket.
   - **Por qué:** un nombre cambiado a mitad del proyecto rompe validadores, hooks y skills a la vez. Mejor fijarlos ahora.
   - **Cómo:** parte de los del original (`spec-clarify`, `explorer`, `00-clarification.md`…) y cambia solo lo que tenga un motivo claro.
   - **Hecho cuando:** tienes la lista completa en tu nota de diseño.
+  - **Criterio precisado (11/11, con el usuario):** la "nota de diseño" es el propio repo, no una nota externa: el usuario no quiere usar Obsidian en este proyecto. La lista vive en `ADR-002` de `docs/decisions.md`.
+  - **Comprobado:** decidido por Claude por delegación del usuario. `ADR-002` en `docs/decisions.md` (`2026-11-11 17:29 (Europe/Madrid)`) lista las 4 fases (`clarify`, `plan`, `implement`, `validate`) con su skill, los 6 agentes (`explorer`, `plan-auditor`, `developer`, `reviewer`, `design-qa`, `analyst`), los 8 artefactos de un ticket (`00-clarification.md` a `05-design-qa.md`, `journal.jsonl` y `BLOCKED.md`), las carpetas del repo y las que crea en un proyecto, y los tipos de ticket (`feature` y `fix`). Parte de los nombres del original, leídos de su `docs/contracts.md`, y cada cambio lleva su motivo en una tabla.
 
-- [ ] **1.1.3 · Repasar tus notas de la Etapa 0** · ⏱️ 15 min
+- [x] **1.1.3 · Repasar tus notas de la Etapa 0** · ⏱️ 15 min · ✅ 11/11
   - **Qué:** las 3 cosas que cambiarías del original.
   - **Por qué:** es el momento de decidir si las cambias. Después sale caro.
   - **Cómo:** para cada una, decide sí o no y apunta el motivo.
   - **Hecho cuando:** las 3 tienen decisión.
+  - **Criterio precisado (11/11, con el usuario):** las notas de la Etapa 0 están en una nota de Obsidian que el usuario no quiere usar y que no revisó. Las 3 cosas se eligen de nuevo a partir de lo que quedó comprobado en este repo al ejecutar el original (tareas 0.2.1 y 0.2.5 de `etapa-0-preparacion.md`) y de su `docs/contracts.md`. Las elige y las decide Claude por delegación del usuario, que no las revisó una a una.
+  - **Comprobado:** las 3 tienen decisión y motivo en `docs/decisions.md`, las tres con "Change it: yes": `ADR-003` (hooks y scripts en Node, nunca bash: 34 de 174 tests del original fallan en Windows), `ADR-004` (los tests del propio harness no entran en las comprobaciones de un proyecto: `FIX-1` acabó en `RED` solo por ellos) y `ADR-005` (las comprobaciones las ejecuta un script, sin agente validador).
 
-- [ ] **1.1.4 · Abrir el registro de decisiones del harness** · ⏱️ 15 min
+- [x] **1.1.4 · Abrir el registro de decisiones del harness** · ⏱️ 15 min · ✅ 11/11
   - **Qué:** `docs/decisions.md` en el repo `harness`, con una entrada por cada decisión de esta fase.
   - **Por qué:** desde hoy tomas decisiones (idioma, nombres, tus 3 cambios). Si no las apuntas con fecha y motivo, dentro de un mes no sabrás por qué el harness es como es. En la Etapa 6 un script lo hará por ti; hasta entonces, a mano.
   - **Cómo:** una entrada por decisión con este formato (es el mismo que automatizarás en la Etapa 6):
@@ -47,15 +52,20 @@
     ```
     Mete también las filas de la tabla "Decisiones de diseño" del índice.
   - **Hecho cuando:** cada decisión de esta fase y del índice tiene su entrada con fecha.
+  - **Criterio precisado (11/11, con el usuario):** el formato de arriba tiene 3 campos, pero el de la Etapa 6 (`etapa-6-documentos.md`, tarea 6.1.4 y validador 6.3.3) tiene 5: añade `Ts` y `Supersedes`. Como el registro solo crece y no se reescribe, las entradas llevan ya los 5 campos; `Supersedes` vale `None` cuando no sustituye a nada. Las fechas no se escriben a mano: `stamp()` no existe todavía, así que las rellena desde el reloj un script temporal de Node que no forma parte del repo.
+  - **Comprobado:** `docs/decisions.md` tiene 21 entradas, `ADR-001` a `ADR-021`, consecutivas. En PowerShell, cada patrón aparece 21 veces: `- Date: … (Europe/Madrid)`, `- Ts:`, `- Status: accepted`, `- Source: manual`, `- Supersedes: None`, `### Context`, `### Decision` y `### Consequences`; los `Ts` van en orden estrictamente creciente, de `2026-11-11T16:28:50.097Z` a `2026-11-11T16:30:46.892Z`. Las decisiones de la fase son `ADR-001` (idioma), `ADR-002` (nombres) y `ADR-003` a `ADR-005` (los 3 cambios); las 17 filas de "Decisiones de diseño" del índice son `ADR-003` (que coincide con el primer cambio) y `ADR-006` a `ADR-021`.
 
-- [ ] **1.1.5 · Abrir el documento de arquitectura del harness** · ⏱️ 20 min
+- [x] **1.1.5 · Abrir el documento de arquitectura del harness** · ⏱️ 20 min · ✅ 11/11
   - **Qué:** `docs/architecture.md` en el repo `harness`.
   - **Por qué:** es el mapa del propio harness. Lo irás ampliando al terminar cada etapa, y en el portfolio explica de un vistazo cómo está hecho.
   - **Cómo:** secciones `Overview` (qué es, con el árbol de carpetas del índice), `Components` (una línea por pieza, la irás llenando), `Constraints` (las reglas de "Decisiones de diseño", citando su `ADR-n`) y `Changelog` (una línea por etapa terminada).
   - **Hecho cuando:** existe con las 4 secciones y una primera línea en el `Changelog`.
+  - **Comprobado:** `docs/architecture.md` existe y sus títulos de nivel 2 son, en orden, `Overview`, `Components`, `Constraints` y `Changelog`. `Overview` lleva el árbol de carpetas del índice; `Components`, una línea por pieza que existe hoy; `Constraints`, 21 reglas, cada una con su `(ADR-n)`, y los 21 existen en `docs/decisions.md`. La primera línea del `Changelog` es `- 2026-11-11 17:31 · manual · Stage 0 done: …`, con la fecha leída del reloj.
 
 ### ✅ Checkpoint 1.1
 Tienes escritos el idioma de cada cosa, la lista de nombres y la decisión sobre tus 3 cambios, y todas están en `docs/decisions.md` con su fecha.
+
+**Superado:** 11/11 · en PowerShell, `docs/decisions.md` tiene 22 entradas consecutivas y las 22 llevan `- Date: … (Europe/Madrid)`: el idioma es `ADR-001` (17:28), la lista de nombres `ADR-002` (17:29) y los 3 cambios `ADR-003`, `ADR-004` y `ADR-005` (17:29). Las cinco las decidió Claude por delegación del usuario. `pnpm test` sale con código 0.
 
 ---
 
